@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Métiers après le CAP AEPE</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .intro-box {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #ff6b6b;
+            text-align: center;
+        }
+
+        .intro-box p {
+            color: #2c3e50;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 12px 25px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95em;
+        }
+
+        .filter-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .search-box {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .search-box input {
+            width: 100%;
+            max-width: 500px;
+            padding: 15px 20px;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            font-size: 1em;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .metiers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .metier-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+            border-left: 6px solid;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metier-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            opacity: 0.1;
+            font-size: 4em;
+        }
+
+        .metier-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .metier-card.creche {
+            border-color: #ff6b6b;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+        }
+
+        .metier-card.ecole {
+            border-color: #48dbfb;
+            background: linear-gradient(135deg, #e3f9ff 0%, #d4f1ff 100%);
+        }
+
+        .metier-card.domicile {
+            border-color: #1dd1a1;
+            background: linear-gradient(135deg, #e8fff8 0%, #d4ffe8 100%);
+        }
+
+        .metier-card.loisirs {
+            border-color: #feca57;
+            background: linear-gradient(135deg, #fff9e6 0%, #fff0cc 100%);
+        }
+
+        .metier-card.autre {
+            border-color: #a29bfe;
+            background: linear-gradient(135deg, #f5f3ff 0%, #ebe6ff 100%);
+        }
+
+        .metier-emoji {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .metier-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .metier-lieu {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 1.05em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .metier-card.creche .metier-lieu {
+            background: #ff6b6b;
+        }
+
+        .metier-card.ecole .metier-lieu {
+            background: #48dbfb;
+        }
+
+        .metier-card.domicile .metier-lieu {
+            background: #1dd1a1;
+        }
+
+        .metier-card.loisirs .metier-lieu {
+            background: #feca57;
+            color: #2c3e50;
+        }
+
+        .metier-card.autre .metier-lieu {
+            background: #a29bfe;
+        }
+
+        .metier-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+
+        .metier-details {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px dashed rgba(0,0,0,0.1);
+        }
+
+        .metier-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .metier-info-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-right: 8px;
+            min-width: 90px;
+        }
+
+        .metier-info-value {
+            color: #2c3e50;
+        }
+
+        .code-rome {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85em;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+            font-size: 1.2em;
+        }
+
+        .stats-box {
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .stats-box h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .metiers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Les Métiers après le CAP AEPE 🎓</h1>
+            <p class="subtitle">Découvrez toutes les opportunités professionnelles qui s'offrent à vous !</p>
+        </div>
+
+        <div class="intro-box">
+            <p><strong>Le CAP AEPE ouvre les portes de nombreux métiers auprès des enfants de 0 à 6 ans.</strong><br>
+            Explorez les différentes possibilités et trouvez celle qui vous correspond !</p>
+        </div>
+
+        <div class="stats-box">
+            <h3>📊 En chiffres</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" id="stat-total">25</div>
+                    <div class="stat-label">Métiers accessibles</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Lieux d'exercice</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">0-6</div>
+                    <div class="stat-label">Ans (tranche d'âge)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Rechercher un métier...">
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" data-filter="tous">Tous les métiers</button>
+            <button class="filter-btn" data-filter="creche">🏢 Crèche</button>
+            <button class="filter-btn" data-filter="ecole">🏫 École</button>
+            <button class="filter-btn" data-filter="domicile">🏠 Domicile</button>
+            <button class="filter-btn" data-filter="loisirs">🎪 Loisirs</button>
+            <button class="filter-btn" data-filter="autre">➕ Autres</button>
+        </div>
+
+        <div class="metiers-grid" id="metiersGrid">
+            <!-- Les cartes seront générées par JavaScript -->
+        </div>
+
+        <div class="no-results hidden" id="noResults">
+            <p>😕 Aucun métier ne correspond à votre recherche.</p>
+        </div>
+    </div>
+
+    <script>
+        const metiers = [
+            {
+                titre: "Auxiliaire de puériculture en crèche",
+                emoji: "👶",
+                lieu: "Crèche",
+                categorie: "creche",
+                description: "Accompagne les enfants de 0 à 3 ans dans leur développement et leur éveil. Assure les soins d'hygiène, les repas et organise des activités adaptées.",
+                codeRome: "J1304",
+                contrat: "CDI, CDD",
+                salaire: "SMIC à 1 600€ net/mois",
+                evolution: "EJE, infirmière puéricultrice"
+            },
+            {
+                titre: "Agent de crèche",
+                emoji: "🍼",
+                lieu: "Crèche",
+                categorie: "creche",
+                description: "Participe à l'accueil des enfants et de leurs familles, assure l'entretien des locaux et le service des repas. Aide l'auxiliaire dans les soins.",
+                codeRome: "K1303",
+                contrat: "CDI, CDD",
+                salaire: "SMIC à 1 500€ net/mois",
+                evolution: "Auxiliaire de puériculture"
+            },
+            {
+                titre: "ATSEM (Agent Territorial Spécialisé des Écoles Maternelles)",
+                emoji: "🎨",
+                lieu: "École maternelle",
+                categorie: "ecole",
+                description: "Assiste l'enseignant dans l'accueil et l'hygiène des enfants de 3 à 6 ans. Prépare et anime des ateliers éducatifs. Concours obligatoire.",
+                codeRome: "K2104",
+                contrat: "Fonction publique",
+                salaire: "1 600€ à 1 900€ net/mois",
+                evolution: "ATSEM principal, animation"
+            },
+            {
+                titre: "Assistante maternelle agréée",
+                emoji: "🏡",
+                lieu: "Domicile (le sien)",
+                categorie: "domicile",
+                description: "Accueille à son domicile 1 à 4 enfants de 0 à 6 ans. Autonomie complète dans l'organisation. Agrément PMI obligatoire.",
+                codeRome: "K1303",
+                contrat: "Indépendant",
+                salaire: "Variable selon nombre d'enfants",
+                evolution: "MAM, formation continue"
+            },
+            {
+                titre: "Garde d'enfants à domicile",
+                emoji: "👨‍👩‍👧",
+                lieu: "Domicile (des parents)",
+                categorie: "domicile",
+                description: "Garde un ou plusieurs enfants au domicile des parents. Assure les soins, les repas, les activités et peut accompagner à l'école.",
+                codeRome: "K1303",
+                contrat: "CDI, CDD, mandataire",
+                salaire: "SMIC à 1 400€ net/mois",
+                evolution: "Assistante maternelle"
+            },
+            {
+                titre: "Animateur petite enfance",
+                emoji: "🎭",
+                lieu: "Centre de loisirs",
+                categorie: "loisirs",
+                description: "Anime des activités ludiques et éducatives pour les jeunes enfants en accueil de loisirs, centres sociaux ou pendant les vacances.",
+                codeRome: "G1203",
+                contrat: "CDD, CDI, saisonnier",
+                salaire: "SMIC à 1 500€ net/mois",
+                evolution: "Directeur ACM, coordinateur"
+            },
+            {
+                titre: "Agent d'animation en ludothèque",
+                emoji: "🎲",
+                lieu: "Ludothèque",
+                categorie: "loisirs",
+                description: "Accueille les enfants et leurs parents, propose des jeux adaptés et anime des séances de jeu. Entretient le matériel ludique.",
+                codeRome: "G1203",
+                contrat: "CDI, CDD",
+                salaire: "SMIC à 1 500€ net/mois",
+                evolution: "Responsable ludothèque"
+            },
+            {
+                titre: "Aide auxiliaire de puériculture",
+                emoji: "💊",
+                lieu: "Maternité, PMI",
+                categorie: "autre",
+                description: "Seconde l'auxiliaire de puériculture en maternité ou en PMI. Participe aux soins des nouveau-nés et accompagne les jeunes parents.",
+                codeRome: "J1304",
+                contrat: "CDD, CDI",
+                salaire: "SMIC à 1 500€ net/mois",
+                evolution: "Auxiliaire de puériculture (avec diplôme)"
+            },
+            {
+                titre: "Agent de service en école maternelle",
+                emoji: "🧹",
+                lieu: "École maternelle",
+                categorie: "ecole",
+                description: "Assure l'entretien des locaux scolaires, participe à la surveillance des enfants pendant la pause méridienne et peut aider au service de cantine.",
+                codeRome: "K2204",
+                contrat: "CDI, CDD",
+                salaire: "SMIC à 1 400€ net/mois",
+                evolution: "ATSEM (avec concours)"
+            },
+            {
+                titre: "Intervenant en halte-garderie",
+                emoji: "⏰",
+                lieu: "Halte-garderie",
+                categorie: "creche",
+                description: "Accueille des enfants de façon ponctuelle ou régulière. Propose des activités d'éveil et assure les soins de base dans un cadre flexible.",
+                codeRome: "K1303",
+                contrat: "CDD, CDI, temps partiel",
+                salaire: "SMIC horaire variable",
+                evolution: "Auxiliaire, responsable"
+            },
+            {
+                titre: "Agent de micro-crèche",
+                emoji: "🏘️",
+                lieu: "Micro-crèche",
+                categorie: "creche",
+                description: "Travaille dans une structure de petite taille (max 12 enfants). Polyvalence importante : soins, activités, entretien, relation parents.",
+                codeRome: "K1303",
+                contrat: "CDI, CDD",
+                salaire: "SMIC à 1 600€ net/mois",
+                evolution: "Gestionnaire micro-crèche"
+            },
+            {
+                titre: "Responsable de Maison d'Assistantes Maternelles (MAM)",
+                emoji: "🤝",
+                lieu: "MAM",
+                categorie: "domicile",
+                description: "Exerce en équipe avec 2 à 4 assistantes maternelles dans un local dédié. Partage des locaux et mutualisation des compétences.",
+                codeRome: "K1303",
+                contrat: "Indépendant",
+                salaire: "Variable selon activité",
+                evolution: "Formation gestion, EJE"
+            },
+            {
+                titre: "Baby-sitter professionnel",
+                emoji: "🌙",
+                lieu: "Domicile",
+                categorie: "domicile",
+                description: "Garde ponctuelle d'enfants à domicile (soirées, week-ends). Le CAP AEPE apporte une vraie crédibilité professionnelle.",
+                codeRome: "K1303",
+                contrat: "Indépendant, mandataire",
+                salaire: "Variable (10-15€/heure)",
+                evolution: "Garde régulière, assistante maternelle"
+            },
+            {
+                titre: "Accompagnant périscolaire",
+                emoji: "🎒",
+                lieu: "École",
+                categorie: "ecole",
+                description: "Encadre les enfants pendant les temps périscolaires (matin, midi, soir). Anime des activités, surveille les repas et les devoirs.",
+                codeRome: "K2104",
+                contrat: "CDD, CDI temps partiel",
+                salaire: "SMIC horaire",
+                evolution: "Animateur, directeur périscolaire"
+            },
+            {
+                titre: "Agent de puériculture en multi-accueil",
+                emoji: "🌈",
+                lieu: "Multi-accueil",
+                categorie: "creche",
+                description: "Travaille dans une structure mixte (crèche + halte-garderie). S'adapte à différents rythmes d'accueil et besoins des familles.",
+                codeRome: "K1303",
+                contrat: "CDI, CDD",
+                salaire: "SMIC à 1 600€ net/mois",
+                evolution: "Auxiliaire de puériculture"
+            },
+            {
+                titre: "Éducateur de jeunes enfants (avec formation complémentaire)",
+                emoji: "🎓",
+                lieu: "Crèche, PMI",
+                categorie: "creche",
+                description: "Après une formation complémentaire (diplôme d'État EJE), coordonne les actions éducatives et encadre l'équipe. Conçoit le projet pédagogique.",
+                codeRome: "K1202",
+                contrat: "CDI",
+                salaire: "1 800€ à 2 500€ net/mois",
+                evolution: "Directeur de crèche"
+            },
+            {
+                titre: "Auxiliaire parental",
+                emoji: "👨‍👩‍👧‍👦",
+                lieu: "Domicile",
+                categorie: "domicile",
+                description: "Intervient au domicile pour garder les enfants, gérer les routines quotidiennes, aide aux devoirs et activités. Relation privilégiée avec une famille.",
+                codeRome: "K1303",
+                contrat: "CDI, CDD, CESU",
+                salaire: "SMIC à 1 500€ net/mois",
+                evolution: "Assistante maternelle, gouvernante"
+            },
+            {
+                titre: "Agent de service hospitalier en pédiatrie",
+                emoji: "🏥",
+                lieu: "Hôpital",
+                categorie: "autre",
+                description: "Assure l'entretien et l'hygiène des chambres en service pédiatrique. Peut aider au confort des jeunes patients sous supervision infirmière.",
+                codeRome: "J1301",
+                contrat: "CDI, CDD",
+                salaire: "SMIC à 1 500€ net/mois",
+                evolution: "Aide-soignant, auxiliaire"
+            },
+            {
+                titre: "Animateur en relais petite enfance (RPE)",
+                emoji: "🤱",
+                lieu: "Relais petite enfance",
+                categorie: "autre",
+                description: "Accompagne les assistantes maternelles, organise des ateliers d'éveil, informe les parents. Rôle de coordination et d'animation.",
+                codeRome: "K1203",
+                contrat: "CDI",
+                salaire: "1 500€ à 1 800€ net/mois",
+                evolution: "Coordinateur petite enfance"
+            },
+            {
+                titre: "Intervenant en crèche parentale",
+                emoji: "🤝",
+                lieu: "Crèche parentale",
+                categorie: "creche",
+                description: "Travaille en collaboration étroite avec les parents qui participent à la gestion. Rôle éducatif et accompagnement à la parentalité.",
+                codeRome: "K1303",
+                contrat: "CDI, CDD",
+                salaire: "SMIC à 1 600€ net/mois",
+                evolution: "Référent technique, EJE"
+            },
+            {
+                titre: "Aide éducateur en jardin d'enfants",
+                emoji: "🌻",
+                lieu: "Jardin d'enfants",
+                categorie: "autre",
+                description: "Accueille les enfants de 2 à 6 ans dans une structure intermédiaire entre crèche et école. Activités éducatives et d'éveil adaptées.",
+                codeRome: "K1303",
+                contrat: "CDI, CDD",
+                salaire: "SMIC à 1 600€ net/mois",
+                evolution: "EJE, enseignant spécialisé"
+            },
+            {
+                titre: "Agent de crèche d'entreprise",
+                emoji: "🏢",
+                lieu: "Crèche inter-entreprises",
+                categorie: "creche",
+                description: "Travaille dans une crèche réservée aux salariés d'entreprises partenaires. Mêmes missions qu'en crèche traditionnelle avec horaires adaptés.",
+                codeRome: "K1303",
+                contrat: "CDI",
+                salaire: "SMIC à 1 700€ net/mois",
+                evolution: "Auxiliaire, référent technique"
+            },
+            {
+                titre: "Garde d'enfants en horaires atypiques",
+                emoji: "🌙",
+                lieu: "Domicile",
+                categorie: "domicile",
+                description: "Garde d'enfants tôt le matin, tard le soir, nuits ou week-ends pour parents avec horaires décalés (soignants, hôtellerie, sécurité).",
+                codeRome: "K1303",
+                contrat: "CDD, vacations",
+                salaire: "SMIC + majoration horaires",
+                evolution: "Assistante maternelle"
+            },
+            {
+                titre: "Agent en crèche familiale",
+                emoji: "🏘️",
+                lieu: "Crèche familiale",
+                categorie: "creche",
+                description: "Assistante maternelle agréée rattachée à une crèche familiale. Bénéficie de l'accompagnement d'une équipe tout en gardant à domicile.",
+                codeRome: "K1303",
+                contrat: "Statut particulier",
+                salaire: "Variable selon accueil",
+                evolution: "Assistante maternelle indépendante"
+            },
+            {
+                titre: "Animateur vacances en club enfants",
+                emoji: "🏖️",
+                lieu: "Club vacances",
+                categorie: "loisirs",
+                description: "Encadre et anime des activités pour jeunes enfants dans les clubs de vacances, villages vacances ou hôtels. Emploi saisonnier.",
+                codeRome: "G1203",
+                contrat: "CDD saisonnier",
+                salaire: "SMIC + hébergement",
+                evolution: "Responsable club enfants"
+            },
+            {
+                titre: "Intervenant en Protection Maternelle et Infantile (PMI)",
+                emoji: "👩‍⚕️",
+                lieu: "Centre PMI",
+                categorie: "autre",
+                description: "Assiste les puéricultrices lors des consultations, permanences et visites à domicile. Accompagnement des jeunes parents, prévention.",
+                codeRome: "J1304",
+                contrat: "CDI, CDD",
+                salaire: "SMIC à 1 600€ net/mois",
+                evolution: "Auxiliaire de puériculture, puéricultrice"
+            }
+        ];
+
+        // Génération des cartes
+        function renderMetiers(metiersToRender) {
+            const grid = document.getElementById('metiersGrid');
+            const noResults = document.getElementById('noResults');
+            
+            grid.innerHTML = '';
+            
+            if (metiersToRender.length === 0) {
+                noResults.classList.remove('hidden');
+                grid.classList.add('hidden');
+                return;
+            }
+            
+            noResults.classList.add('hidden');
+            grid.classList.remove('hidden');
+            
+            metiersToRender.forEach(metier => {
+                const card = document.createElement('div');
+                card.className = `metier-card ${metier.categorie}`;
+                card.innerHTML = `
+                    <span class="metier-emoji">${metier.emoji}</span>
+                    <h3 class="metier-title">${metier.titre}</h3>
+                    <span class="metier-lieu">${metier.lieu}</span>
+                    <p class="metier-description">${metier.description}</p>
+                    <div class="metier-details">
+                        <div class="metier-info">
+                            <span class="metier-info-label">Contrat :</span>
+                            <span class="metier-info-value">${metier.contrat}</span>
+                        </div>
+                        <div class="metier-info">
+                            <span class="metier-info-label">Salaire :</span>
+                            <span class="metier-info-value">${metier.salaire}</span>
+                        </div>
+                        <div class="metier-info">
+                            <span class="metier-info-label">Évolution :</span>
+                            <span class="metier-info-value">${metier.evolution}</span>
+                        </div>
+                        <span class="code-rome">Code ROME : ${metier.codeRome}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Filtres
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Retirer active de tous les boutons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Ajouter active au bouton cliqué
+                this.classList.add('active');
+                
+                const filter = this.getAttribute('data-filter');
+                
+                if (filter === 'tous') {
+                    renderMetiers(metiers);
+                } else {
+                    const filtered = metiers.filter(m => m.categorie === filter);
+                    renderMetiers(filtered);
+                }
+                
+                // Reset search
+                document.getElementById('searchInput').value = '';
+            });
+        });
+
+        // Recherche
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            
+            // Désactiver les filtres
+            filterBtns.forEach(b => b.classList.remove('active'));
+            
+            const filtered = metiers.filter(m => 
+                m.titre.toLowerCase().includes(searchTerm) ||
+                m.description.toLowerCase().includes(searchTerm) ||
+                m.lieu.toLowerCase().includes(searchTerm)
+            );
+            
+            renderMetiers(filtered);
+        });
+
+        // Affichage initial
+        renderMetiers(metiers);
+
+        // Mise à jour du compteur
+        document.getElementById('stat-total').textContent = metiers.length;
+    </script>
+</body>
+</html>
