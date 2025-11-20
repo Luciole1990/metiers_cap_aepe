@@ -317,6 +317,144 @@
             margin-top: 5px;
         }
 
+        .view-toggle {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .toggle-btn {
+            padding: 15px 35px;
+            border: 3px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.1em;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .toggle-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .toggle-btn.active {
+            background: #667eea;
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .structure-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+            border-left: 6px solid;
+            position: relative;
+        }
+
+        .structure-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .structure-card.collective {
+            border-color: #ff6b6b;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+        }
+
+        .structure-card.scolaire {
+            border-color: #48dbfb;
+            background: linear-gradient(135deg, #e3f9ff 0%, #d4f1ff 100%);
+        }
+
+        .structure-card.home {
+            border-color: #1dd1a1;
+            background: linear-gradient(135deg, #e8fff8 0%, #d4ffe8 100%);
+        }
+
+        .structure-card.loisir {
+            border-color: #feca57;
+            background: linear-gradient(135deg, #fff9e6 0%, #fff0cc 100%);
+        }
+
+        .structure-card.sante {
+            border-color: #a29bfe;
+            background: linear-gradient(135deg, #f5f3ff 0%, #ebe6ff 100%);
+        }
+
+        .structure-emoji {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .structure-title {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .structure-detail {
+            margin-bottom: 12px;
+            padding: 10px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 8px;
+        }
+
+        .structure-detail-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .structure-detail-value {
+            color: #2c3e50;
+            font-size: 0.95em;
+        }
+
+        .avantages-contraintes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .avantage-item, .contrainte-item {
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.85em;
+        }
+
+        .avantage-item {
+            background: rgba(29, 209, 161, 0.1);
+            color: #1dd1a1;
+            font-weight: 600;
+        }
+
+        .contrainte-item {
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+
+        .structures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2em;
@@ -348,14 +486,19 @@
                     <div class="stat-label">Métiers accessibles</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">5</div>
-                    <div class="stat-label">Lieux d'exercice</div>
+                    <div class="stat-number">16</div>
+                    <div class="stat-label">Types de structures</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">0-6</div>
                     <div class="stat-label">Ans (tranche d'âge)</div>
                 </div>
             </div>
+        </div>
+
+        <div class="view-toggle">
+            <button class="toggle-btn active" data-view="metiers">👔 Voir les métiers</button>
+            <button class="toggle-btn" data-view="structures">🏢 Voir les structures</button>
         </div>
 
         <div class="search-box">
@@ -373,6 +516,10 @@
 
         <div class="metiers-grid" id="metiersGrid">
             <!-- Les cartes seront générées par JavaScript -->
+        </div>
+
+        <div class="structures-grid hidden" id="structuresGrid">
+            <!-- Les cartes structures seront générées par JavaScript -->
         </div>
 
         <div class="no-results hidden" id="noResults">
@@ -670,6 +817,185 @@
             }
         ];
 
+        const structures = [
+            {
+                titre: "Crèche",
+                emoji: "🏢",
+                categorie: "collective",
+                capacite: "20 à 60 places",
+                horaires: "7h30-18h30, lun-ven",
+                contrat: "CDI/CDD, Fonctionnaire (municipal)",
+                salaire: "SMIC à 1 700€/mois",
+                avantages: ["Travail en équipe", "Formation continue", "Stabilité emploi", "Évolution carrière"],
+                contraintes: ["Gestion de groupe", "Rythme soutenu", "Règlement strict"]
+            },
+            {
+                titre: "Micro-crèche",
+                emoji: "🏘️",
+                categorie: "collective",
+                capacite: "Maximum 12 enfants",
+                horaires: "Variables, parfois samedi",
+                contrat: "CDI/CDD",
+                salaire: "SMIC à 1 600€/mois",
+                avantages: ["Ambiance familiale", "Polyvalence", "Autonomie", "Petit groupe"],
+                contraintes: ["Équipe réduite", "Polyvalence obligatoire"]
+            },
+            {
+                titre: "Multi-accueil",
+                emoji: "🌈",
+                categorie: "collective",
+                capacite: "10 à 60 places",
+                horaires: "Flexibles",
+                contrat: "CDI/CDD",
+                salaire: "SMIC à 1 600€/mois",
+                avantages: ["Diversité accueils", "Flexibilité", "Équipe pluridisciplinaire"],
+                contraintes: ["Adaptation rythmes variés", "Turn-over enfants"]
+            },
+            {
+                titre: "Crèche parentale",
+                emoji: "🤝",
+                categorie: "collective",
+                capacite: "10 à 25 places",
+                horaires: "Variables selon projet",
+                contrat: "CDI/CDD",
+                salaire: "SMIC à 1 600€/mois",
+                avantages: ["Implication parents", "Projet innovant", "Ambiance conviviale"],
+                contraintes: ["Gestion avec parents", "Turn-over", "Salaires parfois bas"]
+            },
+            {
+                titre: "Halte-garderie",
+                emoji: "⏰",
+                categorie: "collective",
+                capacite: "10 à 20 places",
+                horaires: "Demi-journées, accueil ponctuel",
+                contrat: "CDD, temps partiel",
+                salaire: "SMIC horaire",
+                avantages: ["Diversité enfants", "Pas de routine"],
+                contraintes: ["Turn-over constant", "Temps partiel", "Instabilité"]
+            },
+            {
+                titre: "Jardin d'enfants",
+                emoji: "🌻",
+                categorie: "collective",
+                capacite: "10 à 80 places",
+                horaires: "Proches rythme scolaire",
+                contrat: "CDI/CDD",
+                salaire: "SMIC à 1 600€/mois",
+                avantages: ["Projet pédagogique riche", "2-6 ans", "Éducation plus que soins"],
+                contraintes: ["Structures rares", "Compétences éducatives"]
+            },
+            {
+                titre: "École maternelle (ATSEM)",
+                emoji: "🎨",
+                categorie: "scolaire",
+                capacite: "Classes de 20-30 élèves",
+                horaires: "8h30-16h30, vacances scolaires",
+                contrat: "Fonction publique (CONCOURS)",
+                salaire: "1 600€ à 1 900€/mois",
+                avantages: ["Sécurité emploi", "Vacances scolaires", "Horaires réguliers", "Évolution"],
+                contraintes: ["Concours sélectif", "Moins d'autonomie", "Entretien inclus"]
+            },
+            {
+                titre: "Accueil périscolaire",
+                emoji: "🎒",
+                categorie: "scolaire",
+                capacite: "Variable",
+                horaires: "Matin/midi/soir, mercredis",
+                contrat: "CDD, temps partiel",
+                salaire: "SMIC horaire",
+                avantages: ["Activités ludiques", "Pas de pression scolaire"],
+                contraintes: ["Horaires fractionnés", "Temps partiel", "Salaire limité"]
+            },
+            {
+                titre: "Assistante maternelle agréée",
+                emoji: "🏡",
+                categorie: "home",
+                capacite: "1 à 4 enfants",
+                horaires: "Libres, négociés",
+                contrat: "Indépendant (AGRÉMENT PMI)",
+                salaire: "1 200€ à 2 000€/mois (variable)",
+                avantages: ["Autonomie totale", "Chez soi", "Relation privilégiée", "Revenus intéressants"],
+                contraintes: ["Statut indépendant", "Isolement", "Vie pro/perso", "Gestion admin"]
+            },
+            {
+                titre: "Maison d'Assistantes Maternelles (MAM)",
+                emoji: "🏘️",
+                categorie: "home",
+                capacite: "4 à 16 enfants (2-4 assmat)",
+                horaires: "Définis collectivement",
+                contrat: "Indépendant (AGRÉMENT PMI)",
+                salaire: "Variable selon activité",
+                avantages: ["Mutualisation", "Équipe mais autonomie", "Rupture isolement"],
+                contraintes: ["Gestion collective local", "Entente nécessaire", "Statut indépendant"]
+            },
+            {
+                titre: "Garde d'enfants à domicile",
+                emoji: "👨‍👩‍👧",
+                categorie: "home",
+                capacite: "1 à 3 enfants (famille)",
+                horaires: "Variables, parfois atypiques",
+                contrat: "CDI/CDD, CESU",
+                salaire: "SMIC à 1 500€/mois",
+                avantages: ["Relation privilégiée", "Autonomie", "Pas d'investissement"],
+                contraintes: ["Un seul employeur", "Isolement", "Horaires atypiques"]
+            },
+            {
+                titre: "Centre de loisirs (ALSH)",
+                emoji: "🎪",
+                categorie: "loisir",
+                capacite: "10 à 100+ enfants",
+                horaires: "Mercredis et vacances",
+                contrat: "CDD, saisonnier",
+                salaire: "SMIC à 1 500€/mois",
+                avantages: ["Activités ludiques", "Ambiance détendue", "Saisonnalité possible"],
+                contraintes: ["Contrats précaires", "Groupes importants", "Fatigue physique"]
+            },
+            {
+                titre: "Ludothèque",
+                emoji: "🎲",
+                categorie: "loisir",
+                capacite: "Variable",
+                horaires: "Temps partiel souvent",
+                contrat: "CDD/CDI temps partiel",
+                salaire: "SMIC, temps partiel",
+                avantages: ["Ambiance jeu", "Diversité publics", "Créativité"],
+                contraintes: ["Temps partiel", "Entretien matériel"]
+            },
+            {
+                titre: "PMI (Protection Maternelle Infantile)",
+                emoji: "👩‍⚕️",
+                categorie: "sante",
+                capacite: "Consultations individuelles",
+                horaires: "Horaires bureau",
+                contrat: "Fonction publique territoriale",
+                salaire: "1 500€ à 1 800€/mois",
+                avantages: ["Mission prévention", "Relation individualisée", "Fonction publique"],
+                contraintes: ["Situations difficiles", "Déplacements"]
+            },
+            {
+                titre: "Maternité / Service pédiatrique",
+                emoji: "🏥",
+                categorie: "sante",
+                capacite: "Variable",
+                horaires: "3x8, week-ends, jours fériés",
+                contrat: "Fonction publique hospitalière",
+                salaire: "1 500€ à 1 800€/mois + primes",
+                avantages: ["Fonction publique", "Formation continue", "Expérience enrichissante"],
+                contraintes: ["Horaires décalés", "Situations lourdes", "Rythme intense"]
+            },
+            {
+                titre: "Crèche familiale",
+                emoji: "🏡",
+                categorie: "home",
+                capacite: "30 à 100 places (réparties)",
+                horaires: "Flexibles avec chaque assmat",
+                contrat: "Salarié de crèche familiale",
+                salaire: "Variable selon enfants",
+                avantages: ["Domicile mais équipe", "Accompagnement directrice", "Regroupements", "Statut salarié"],
+                contraintes: ["Domicile", "Isolement relatif"]
+            }
+        ];
+
         // Génération des cartes
         function renderMetiers(metiersToRender) {
             const grid = document.getElementById('metiersGrid');
@@ -752,6 +1078,85 @@
             );
             
             renderMetiers(filtered);
+        });
+
+        // Génération des cartes structures
+        function renderStructures() {
+            const grid = document.getElementById('structuresGrid');
+            grid.innerHTML = '';
+            
+            structures.forEach(structure => {
+                const card = document.createElement('div');
+                card.className = `structure-card ${structure.categorie}`;
+                
+                const avantagesHTML = structure.avantages.map(a => 
+                    `<div class="avantage-item">✅ ${a}</div>`
+                ).join('');
+                
+                const contraintesHTML = structure.contraintes.map(c => 
+                    `<div class="contrainte-item">⚠️ ${c}</div>`
+                ).join('');
+                
+                card.innerHTML = `
+                    <span class="structure-emoji">${structure.emoji}</span>
+                    <h3 class="structure-title">${structure.titre}</h3>
+                    <div class="structure-detail">
+                        <div class="structure-detail-label">👥 Capacité :</div>
+                        <div class="structure-detail-value">${structure.capacite}</div>
+                    </div>
+                    <div class="structure-detail">
+                        <div class="structure-detail-label">⏰ Horaires :</div>
+                        <div class="structure-detail-value">${structure.horaires}</div>
+                    </div>
+                    <div class="structure-detail">
+                        <div class="structure-detail-label">💼 Contrat :</div>
+                        <div class="structure-detail-value">${structure.contrat}</div>
+                    </div>
+                    <div class="structure-detail">
+                        <div class="structure-detail-label">💰 Salaire :</div>
+                        <div class="structure-detail-value">${structure.salaire}</div>
+                    </div>
+                    <div class="avantages-contraintes">
+                        <div>
+                            ${avantagesHTML}
+                        </div>
+                        <div>
+                            ${contraintesHTML}
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Toggle entre métiers et structures
+        const toggleBtns = document.querySelectorAll('.toggle-btn');
+        const metiersGrid = document.getElementById('metiersGrid');
+        const structuresGrid = document.getElementById('structuresGrid');
+        const searchBox = document.querySelector('.search-box');
+        const filters = document.querySelector('.filters');
+        
+        toggleBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const view = this.getAttribute('data-view');
+                
+                // Mettre à jour les boutons
+                toggleBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                if (view === 'metiers') {
+                    metiersGrid.classList.remove('hidden');
+                    structuresGrid.classList.add('hidden');
+                    searchBox.classList.remove('hidden');
+                    filters.classList.remove('hidden');
+                } else {
+                    metiersGrid.classList.add('hidden');
+                    structuresGrid.classList.remove('hidden');
+                    searchBox.classList.add('hidden');
+                    filters.classList.add('hidden');
+                    renderStructures();
+                }
+            });
         });
 
         // Affichage initial
